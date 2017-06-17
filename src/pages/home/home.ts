@@ -11,4 +11,8 @@ export class HomePage {
 
   }
 
+  goToChatPage(){
+    this.navCtrl.push('ChatPage');
+  }
+
 }
