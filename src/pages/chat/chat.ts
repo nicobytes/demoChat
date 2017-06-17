@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { FirebaseListObservable, AngularFireDatabase } from 'angularfire2/database';
 
-/**
- * Generated class for the ChatPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 @IonicPage()
 @Component({
   selector: 'page-chat',
@@ -14,11 +9,54 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ChatPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  newText: string = '';
+  messages: FirebaseListObservable<any>;
+  /*messages: any[] = [
+    {
+      text: 'Hola',
+      user: {
+        name: 'Nicolas',
+        picture: 'http://www.nicobytes.com/images/photo.jpg'
+      }
+    },
+    {
+      text: 'Hola a todos',
+      user: {
+        name: 'Zulema',
+        picture: 'http://www.nicobytes.com/images/photo.jpg'
+      }
+    },
+    {
+      text: 'Hola a todos',
+      user: {
+        name: 'Valentina',
+        picture: 'http://www.nicobytes.com/images/photo.jpg'
+      }
+    }
+  ];*/
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private database: AngularFireDatabase
+  ) {
+    this.messages = this.database.list('/chat');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatPage');
+  }
+
+  sendMessage(){
+    let newMessage = {
+      text: this.newText,
+      user: {
+        name: 'Nicolas',
+        picture: 'http://www.nicobytes.com/images/photo.jpg'
+      }
+    }
+    this.messages.push(newMessage);
+    this.newText = '';
   }
 
 }
